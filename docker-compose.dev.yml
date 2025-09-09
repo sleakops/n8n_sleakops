@@ -1,0 +1,28 @@
+# Development override for docker-compose.yml
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  n8n:
+    environment:
+      - N8N_LOG_LEVEL=debug
+      - N8N_LOG_OUTPUT=console
+      - N8N_SKIP_WEBHOOK_DEREGISTRATION_SHUTDOWN=true
+    ports:
+      - "5678:5678"
+    volumes:
+      # Mount local workflows for development
+      - ./workflows:/home/node/.n8n/workflows
+      # Mount local credentials for development  
+      - ./credentials:/home/node/.n8n/credentials
+
+  postgres:
+    ports:
+      # Expose PostgreSQL port for development access
+      - "5432:5432"
+    volumes:
+      # Use named volume for development data persistence
+      - postgres_dev_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_dev_data:
+    driver: local
