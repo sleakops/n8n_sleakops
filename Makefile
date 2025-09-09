@@ -6,23 +6,35 @@ help: ## Show this help message
 	@echo "Available commands:"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
-start: ## Start n8n services
+start: ## Start n8n services (PostgreSQL version)
 	@echo "🚀 Starting n8n SleakOps deployment..."
 	docker compose up -d
 
-stop: ## Stop n8n services
+start-sqlite: ## Start n8n services (SQLite version)
+	@echo "🚀 Starting n8n SleakOps deployment with SQLite..."
+	docker compose -f docker-compose.sqlite.yml up -d
+
+stop: ## Stop n8n services (PostgreSQL version)
 	@echo "🛑 Stopping n8n services..."
 	docker compose down
+
+stop-sqlite: ## Stop n8n services (SQLite version)
+	@echo "🛑 Stopping n8n services..."
+	docker compose -f docker-compose.sqlite.yml down
 
 restart: ## Restart n8n services
 	@echo "🔄 Restarting n8n services..."
 	docker compose restart
 
-logs: ## Show logs for all services
+logs: ## Show logs for all services (PostgreSQL version)
 	@echo "📋 Showing logs..."
 	docker compose logs -f
 
-logs-n8n: ## Show logs for n8n service only
+logs-sqlite: ## Show logs for SQLite version
+	@echo "📋 Showing logs (SQLite)..."
+	docker compose -f docker-compose.sqlite.yml logs -f
+
+logs-n8n: ## Show logs for n8n service only (PostgreSQL version)
 	docker compose logs -f n8n
 
 logs-db: ## Show logs for PostgreSQL service only

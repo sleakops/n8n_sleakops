@@ -40,6 +40,10 @@ nano .env
 
 ### 3. Deploy n8n
 
+Choose one of the deployment options:
+
+#### Option A: With PostgreSQL (Recommended for Production)
+
 ```bash
 # Start the services
 docker compose up -d
@@ -48,6 +52,18 @@ docker compose up -d
 docker compose logs -f
 ```
 
+#### Option B: With SQLite (Simple/Development Setup)
+
+```bash
+# Start with SQLite (single container, no database dependencies)
+docker compose -f docker-compose.sqlite.yml up -d
+
+# Check the logs
+docker compose -f docker-compose.sqlite.yml logs -f
+```
+
+**Note**: If you experience DNS resolution issues in your environment, use the SQLite option which doesn't require inter-container networking.
+
 ### 4. Access n8n
 
 Open your browser and navigate to:
@@ -55,7 +71,27 @@ Open your browser and navigate to:
 - **Username**: admin (or your configured username)
 - **Password**: password (or your configured password)
 
-## Configuration
+## Configuration Options
+
+This repository provides multiple deployment configurations:
+
+1. **docker-compose.yml** - Full production setup with PostgreSQL database
+2. **docker-compose.sqlite.yml** - Lightweight setup with SQLite database  
+3. **docker-compose.dev.yml** - Development overrides for debugging
+
+### Database Options
+
+#### PostgreSQL (Production)
+- Persistent, scalable database
+- Supports multiple concurrent users
+- Better performance for complex workflows
+- Requires inter-container networking
+
+#### SQLite (Development/Simple)
+- Single-file database
+- No additional containers required
+- Perfect for development and testing
+- Easier deployment in restricted environments
 
 ### Environment Variables
 
@@ -104,20 +140,31 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 
 ### Start Services
 ```bash
+# PostgreSQL version
 docker compose up -d
+
+# SQLite version
+docker compose -f docker-compose.sqlite.yml up -d
 ```
 
 ### Stop Services
 ```bash
+# PostgreSQL version
 docker compose down
+
+# SQLite version  
+docker compose -f docker-compose.sqlite.yml down
 ```
 
 ### View Logs
 ```bash
-# All services
+# PostgreSQL version
 docker compose logs -f
 
-# Specific service
+# SQLite version
+docker compose -f docker-compose.sqlite.yml logs -f
+
+# Specific service (PostgreSQL version)
 docker compose logs -f n8n
 ```
 
