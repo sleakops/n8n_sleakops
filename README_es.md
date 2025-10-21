@@ -287,8 +287,6 @@ docker-compose logs -f
 
 ## 📄 Licencia
 
-**Este repositorio (configuración de Docker)**: [MIT/Apache 2.0/Tu Licencia]
-
 **n8n**: Este proyecto usa n8n, que está bajo [Apache 2.0 License con Commons Clause](https://github.com/n8n-io/n8n/blob/master/LICENSE.md). 
 
 ⚠️ **Nota importante**: La Commons Clause restringe el uso comercial de n8n como servicio SaaS. Si planeas ofrecer n8n como servicio a tus clientes, revisa las [opciones de licenciamiento empresarial de n8n](https://n8n.io/pricing/).
