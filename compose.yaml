@@ -2,7 +2,6 @@ services:
 
   db:
     image: postgres:17
-    restart: always
     environment:
       - POSTGRES_USER=n8n
       - POSTGRES_PASSWORD=n8n
@@ -17,7 +16,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    restart: always
     volumes:
       - redis_data:/data
     healthcheck:
@@ -30,13 +28,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: n8n_server
+    command: start
     ports:
       - "5678:5678"
     env_file:
       - .env
     depends_on:
-      - db
       - redis
+      - db
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
@@ -45,27 +45,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: n8n_server
     command: worker
+    environment:
+      - N8N_WORKERS_ENABLED=true
     env_file:
       - .env
     depends_on:
-      - db
       - redis
     volumes:
       - n8n_data:/home/node/.n8n
       - ./local-files:/files
-  
-  # n8n-runners:
-  #   image: n8nio/runners:1.111.0
-  #   container_name: n8n-runners
-  #   environment:
-  #     - N8N_RUNNERS_TASK_BROKER_URI=http://n8n-main:5679
-  #     - N8N_RUNNERS_AUTH_TOKEN=your-secret-here
-  #     # etc.
-  #   depends_on:
-  #     - n8n
 
 volumes:
   n8n_data:
-  postgres_data:
   redis_data:
+  postgres_data:
